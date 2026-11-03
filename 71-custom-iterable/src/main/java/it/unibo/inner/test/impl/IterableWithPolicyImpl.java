@@ -6,19 +6,33 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /** 
- * this class implements the interface {@link IterableWithPolicy} 
+ * array implmentation of {@link IterableWithPolicy}: it iterates
+ * the elements of the given array in their original order, returning only
+ * those accepted by the current iteration policy
+ * @param <T> the type of the elements of the array
  */
 public class IterableWithPolicyImpl<T> implements IterableWithPolicy<T>{
     
     private final T[] iterableArray;
+    private Predicate<T> predicate;
+
+    public IterableWithPolicyImpl(final T[] array, final Predicate<T> predicate) {
+        this.iterableArray = array;
+        this.predicate = predicate;
+    }
 
     public IterableWithPolicyImpl(final T[] array) {
-        this.iterableArray = array;
+        this(array, new Predicate<T>() {
+            @Override   
+            public boolean test (T elem) {
+                return true;
+            }
+        });
     }
 
     @Override 
     public void setIterationPolicy(final Predicate<T> filter) {
-
+        this.predicate = filter;
     }
 
     @Override 
@@ -31,10 +45,10 @@ public class IterableWithPolicyImpl<T> implements IterableWithPolicy<T>{
 
         @Override 
         public boolean hasNext() {
-            if (arrayIndex < iterableArray.length) {
-                return true;
+            while (arrayIndex < iterableArray.length && !predicate.test(iterableArray[arrayIndex])) {
+                arrayIndex++;
             }
-            return false;
+            return arrayIndex < iterableArray.length; 
         }
 
         @Override 
