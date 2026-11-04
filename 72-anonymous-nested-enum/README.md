@@ -11,6 +11,7 @@ tramite una classe anonima.
 Si osservi `TestFunctionalLibrary` per trovare esempi di classi anonime che implementano function.
 Ci si prepari a rispondere alla seguente domanda al momento della correzione:
 > perché `identity()` è un metodo, e non una costante `public static`?
+Risposta: identity() è un metodo e non una costante public static perché così possiamo avere solamente un'interfaccia, e l'oggetto da ritornare tramite la funzione identità lo costruiamo lì dentro con una classe anonima che fa override di call, senza classi di appoggio. Con una costante avrei dovuto comunque implementare l'interfaccia con una classe anonima, ma il suo tipo sarebbe stato congelato alla dichiarazione — un campo static non può essere generico — quindi Function<Object, Object> non sarebbe stata assegnabile a una Function<String, String>, e avrei dovuto fare cast e sopprimere i warning. Il metodo invece ha il proprio <T>, dedotto a ogni chiamata: l'identità non esiste per un tipo solo, e una costante mi costringerebbe a scriverne una per ogni tipo.
 
 ## Parte 2: sfruttare le classi anonime per costruire una libreria funzionale
 
