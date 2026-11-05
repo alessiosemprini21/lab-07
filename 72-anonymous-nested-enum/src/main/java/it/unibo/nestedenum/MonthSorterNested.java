@@ -42,13 +42,31 @@ public final class MonthSorterNested implements MonthSorter {
         }
     }
 
+    public static class SortByMonthOrder implements Comparator<String> {
+        @Override
+        public int compare(final String a, final String b) {
+            final var month1 = Month.fromString(a);
+            final var month2 = Month.fromString(b);
+            return month1.compareTo(month2);
+        }
+    }
+
+    public static class SortByDate implements Comparator<String> {
+        @Override
+        public int compare(final String a, final String b) {
+            final var days1 = Month.fromString(a).getDays();
+            final var days2 = Month.fromString(b).getDays();
+            return Integer.compare(days1, days2);
+        }
+    }
+
     @Override
     public Comparator<String> sortByDays() {
-        return null;
+        return new SortByDate();
     }
 
     @Override
     public Comparator<String> sortByOrder() {
-        return null;
+        return new SortByMonthOrder();
     }
 }
